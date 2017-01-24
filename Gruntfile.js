@@ -15,32 +15,36 @@ module.exports = function(grunt) {
       }
     },
     jscs: {
-      src: ['Gruntfile.js', 'js/**.js'],
+      src: ['Gruntfile.js', 'js/**/*.js', 'spec/**/*.js'],
       options: {
         force: true,
         preset: 'google'
       }
     },
     jshint: {
-      src: ['Gruntfile.js', 'js/**.js']
+      src: ['Gruntfile.js', 'js/**/*.js', 'spec/**/*.js'],
+      options: {
+        force: true,
+        expr: true
+      }
     },
     clean: ['dist'],
     copy: {
       main: {
         files: [
           {expand: true, cwd: 'html/', src: '**.html', dest: 'dist/'},
-          {expand: true, cwd: 'scripts/', src: '**.js', dest: 'dist/scripts/'},
+          {expand: true, cwd: 'js/', src: '**.js', dest: 'dist/js/'},
           {
             expand: true,
             cwd: 'bower_components/phaser/build/',
             src: 'phaser.min.js',
-            dest: 'dist/scripts'
+            dest: 'dist/js'
           },
           {
             expand: true,
             cwd: 'bower_components/requirejs/',
             src: 'require.js',
-            dest: 'dist/scripts'
+            dest: 'dist/js'
           }
         ]
       }
@@ -48,7 +52,11 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: ['html/*.html', 'js/*.js'],
-        tasks: ['build']
+        tasks: ['build'],
+        options: {
+          interrupt: true,
+          atBegin: true
+        }
       }
     },
     mochaTest: {
@@ -57,7 +65,8 @@ module.exports = function(grunt) {
       }
     }
   });
-  grunt.registerTask('default', ['connect:server:keepalive', 'watch']);
+  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('serve', ['connect:server:keepalive']);
   grunt.registerTask('build', [
     'jshint',
     'jscs',
