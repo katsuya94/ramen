@@ -1,0 +1,10 @@
+{
+  "extends": "google",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "require-jsdoc": "off"
+  }
+}
