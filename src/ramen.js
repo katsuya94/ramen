@@ -1,1 +1,6 @@
-export default class Ramen {}
+export default class Ramen {
+  constructor() {
+    this.toppings = [];
+  }
+}
+
