@@ -39965,9 +39965,11 @@ var _pixi2 = _interopRequireDefault(_pixi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log(new _ramen2.default());
-console.log(_pixi2.default);
-console.log('hello');
+var renderer = _pixi2.default.autoDetectRenderer(256, 256);
+document.body.appendChild(renderer.view);
+
+var stage = new _pixi2.default.Container();
+renderer.render(stage);
 
 },{"./pixi.js":190,"./ramen.js":191}],190:[function(require,module,exports){
 'use strict';

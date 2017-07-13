@@ -1,7 +1,9 @@
 import Ramen from './ramen.js';
 import PIXI from './pixi.js';
 
-console.log(new Ramen());
-console.log(PIXI);
-console.log('hello');
+var renderer = PIXI.autoDetectRenderer(256, 256);
+document.body.appendChild(renderer.view);
+
+var stage = new PIXI.Container();
+renderer.render(stage);
 
