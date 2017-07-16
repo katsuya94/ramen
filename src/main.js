@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js';
-import {fromPairs, flatMap, range, map, values} from 'lodash';
+import {
+  each, fromPairs, flatMap, range, map, values, padStart, toUpper
+} from 'lodash';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -17,12 +19,15 @@ function tilesetSpritesheetFor(resource) {
   let cols = ~~(baseTexture.width / 32);
   return new PIXI.Spritesheet(baseTexture, {
     meta: {},
-    frames: fromPairs(map(flatMap(range(rows), (x) =>
-      map(range(cols), (y) => ({
+    frames: fromPairs(map(flatMap(range(rows), (y) =>
+      map(range(cols), (x) => ({
         frame: {x: x * 32, y: y * 32, w: 32, h: 32},
         sourceSize: {w: baseTexture.width, h: baseTexture.height},
       }))
-    ), (frame, index) => [index.toString(20), frame])),
+    ), (frame, index) => [
+      baseTexture.imageUrl + toUpper(padStart(index.toString(20), 2, '0')),
+      frame,
+    ])),
   });
 }
 
@@ -31,12 +36,18 @@ function personSpritesheetFor(resource) {
   return new PIXI.Spritesheet(baseTexture, {
     meta: {},
     frames: fromPairs(flatMap(['D', 'L', 'R', 'U'], (direction, y) =>
-      map(range(3), (x) => [direction + x, {
+      map(range(3), (x) => [baseTexture.imageUrl + direction + x, {
         frame: {x: x * 32, y: y * 32, w: 32, h: 32},
         sourceSize: {w: baseTexture.width, h: baseTexture.height},
       }])
     )),
   });
+}
+
+function createSpriteFrom(spritesheet, id) {
+  return new PIXI.Sprite(
+    spritesheet.textures[spritesheet.baseTexture.imageUrl + id]
+  );
 }
 
 PIXI.loader.add([
@@ -49,33 +60,23 @@ new Promise((resolve) => {
 }).then((resources) => {
   let spritesheets = {
     karis: personSpritesheetFor(resources['assets/karis.png']),
-    tileset: tilesetSpritesheetFor(resources['assets/karis.png']),
+    tileset: tilesetSpritesheetFor(resources['assets/tileset.png']),
   };
 
-  Promise.all(
+  return Promise.all(map(values(spritesheets), (spritesheet) =>
+    new Promise((resolve) => spritesheet.parse(resolve))
+  )).then(() => spritesheets);
+}).then((spritesheets) => {
+  each(range(16), (x) => each(range(9), (y) => {
+    let tile = createSpriteFrom(spritesheets.tileset, '00');
+    tile.x = x * 32;
+    tile.y = y * 32;
+    stage.addChild(tile);
+  }));
 
-  each(values(spritesheets), (spritesheet) => {
-    promise = promise.then(() => new
+  let karis = createSpriteFrom(spritesheets.karis, 'D1');
+  stage.addChild(karis);
 
-  function loadRecursive(unloadedSheets) {
-    if (isEmpty(unloadedSheets)) {
-      return spritesheets;
-    }
-
-    let spritesheet = unloadedSheets.shift();
-    let chainedPromise = loadRecursive(unloadedSheets);
-
-    return new Promise((resolve) => spritesheet.parse(resolve))
-      .then(() => chainedPromise);
-  }
-
-  return loadRecursive(values(spritesheets));
-
-  return new Promise((resolve) => {
-  .parse((textures) => {
-    let karis = new PIXI.Sprite(textures['d1']);
-    stage.addChild(karis);
-    renderer.render(stage);
-  });
+  renderer.render(stage);
 });
 
