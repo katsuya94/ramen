@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
@@ -21,8 +21,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "$(npm bin)/eslint src",
     "build": "$(npm bin)/browserify src/main.js --debug --transform babelify --outfile main.js",
-    "watch": "$(npm bin)/watchify src/main.js --debug --transform babelify --outfile main.js",
-    "spritesheet": "$(npm bin)/spritesheet-js --format pixi.js --square --width 32 assets/*.png"
+    "watch": "$(npm bin)/watchify src/main.js --debug --transform babelify --outfile main.js"
   },
   "repository": {
     "type": "git",
