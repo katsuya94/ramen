@@ -1,5 +1,10 @@
 export default class Entity {
-  constructor(spritesheet) {
-    this.spritesheet = spritesheet;
+  set x(x) {
+    this.container.x = x * 32;
+  }
+
+  set y(y) {
+    this.container.y = y * 32;
   }
 }
+

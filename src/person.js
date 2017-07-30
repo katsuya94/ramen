@@ -3,9 +3,10 @@ import Entity from './entity.js';
 
 export default class Person extends Entity {
   constructor(spritesheet) {
-    super(spritesheet);
+    super();
     this.container = new PIXI.Sprite(
-      this.spritesheet.textures[this.spritesheet.baseTexture.imageUrl + 'D1']
+      spritesheet.textures[spritesheet.baseTexture.imageUrl + 'D1']
     );
   }
 }
+

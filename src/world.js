@@ -1,7 +1,16 @@
+import * as PIXI from 'pixi.js';
 import {pull, each} from 'lodash';
+import {makeTiledSprite} from './utilities.js';
+
 export default class World {
-  constructor() {
+  constructor(options) {
     this.container = new PIXI.Container();
+    this.container.addChild(makeTiledSprite({
+      width: options.width,
+      height: options.height,
+      tileset: options.tileset,
+      tiles: options.floor,
+    }));
     this._entities = [];
   }
 
