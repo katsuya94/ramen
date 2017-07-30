@@ -45,7 +45,7 @@ export default class Game {
         'D4', 'D5',
       ],
     });
-    refrigerator.x = 7;
+    refrigerator.x = 12;
     refrigerator.y = 0;
     this.world.add(refrigerator);
 
@@ -58,25 +58,32 @@ export default class Game {
         'HB',
       ],
     });
-    curtain.x = 1;
+    curtain.x = 2;
     curtain.y = 0;
     this.world.add(curtain);
 
     let counter = new Scenery({
       tileset: spritesheets.tileset,
-      width: 4,
-      height: 5,
+      width: 7,
+      height: 7,
       tiles: [
-        '8G', '8H', null, null,
-        '94', '95', null, null,
-        '9C', '9D', '9E', '9E',
-        'A0', 'A1', 'A2', 'A2',
-        'A8', 'A9', 'AA', 'AA',
+        '8G', '8H', null, null, null, null, null,
+        '94', '95', null, null, null, null, null,
+        '94', '95', null, null, null, null, null,
+        '94', '95', null, null, null, null, null,
+        '9C', '9D', '9E', '9E', '9E', '9E', '9E',
+        'A0', 'A1', 'A2', 'A2', 'A2', 'A2', 'A2',
+        'A8', 'A9', 'AA', 'AA', 'AA', 'AA', 'AA',
       ],
     });
     counter.x = 4;
     counter.y = 1;
     this.world.add(counter);
+
+    this.karis = new Person(spritesheets.karis);
+    this.karis.x = 5;
+    this.karis.y = 7;
+    this.world.add(this.karis);
   }
 
   static start() {
