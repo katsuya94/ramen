@@ -55,7 +55,7 @@ export default class Game {
     function frame(timestamp) {
       window.requestAnimationFrame(frame);
 
-      if (timestamp - lastTimestamp > 1000 / 30) {
+      if (timestamp - lastTimestamp > 1000 / 15) {
         lastTimestamp = timestamp;
         fps++;
         updateAndRender();
@@ -92,7 +92,7 @@ export default class Game {
     counter.y = 2;
     this.world.add(counter);
 
-    each(range(5, 11), (x) => {
+    each(range(4, 11), (x) => {
       let chair = makeChair2(tileset);
       chair.x = x;
       chair.y = 7;

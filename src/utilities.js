@@ -1,10 +1,14 @@
 import * as PIXI from 'pixi.js';
-import {each} from 'lodash';
+import {map, each, zip} from 'lodash';
 
 export function makeTiledSprite(options) {
   let container = new PIXI.Container();
 
-  each(options.tiles, (tileID, index) => {
+  let tileCallbacks = options.tileCallbacks || map(options.tiles, () => null);
+
+  let tiles = map(zip(options.tiles, tileCallbacks), (tuple, index) => {
+    let [tileID, tileCallback] = tuple;
+
     if (!tileID) {
       return;
     }
@@ -18,6 +22,12 @@ export function makeTiledSprite(options) {
     tile.y = y * 32;
 
     container.addChild(tile);
+
+    if (tileCallback) {
+      options.callbacks[tileCallback](tile, x, y);
+    }
+
+    return tile;
   });
 
   return container;
