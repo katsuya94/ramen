@@ -1,9 +1,17 @@
 import * as PIXI from 'pixi.js';
-import {bind} from 'lodash';
+import {bind, range, each} from 'lodash';
 import * as Spritesheets from './spritesheets.js';
 import World from './world.js';
 import Person from './person.js';
 import Scenery from './scenery.js';
+import {
+  makeCounter,
+  makeCurtain,
+  makeRefrigerator,
+  makeChair1,
+  makeChair2,
+  makeTable,
+} from './scenery.js';
 
 const WIDTH = 16;
 const HEIGHT = 9;
@@ -30,59 +38,11 @@ export default class Game {
       floor: require('./floor.json'),
     });
 
-    this.karis = new Person(spritesheets.karis);
-    this.karis.x = 5;
-    this.karis.y = 7;
-    this.world.add(this.karis);
-
-    let refrigerator = new Scenery({
-      tileset: spritesheets.tileset,
-      width: 2,
-      height: 3,
-      tiles: [
-        'C8', 'C9',
-        'CG', 'CH',
-        'D4', 'D5',
-      ],
-    });
-    refrigerator.x = 12;
-    refrigerator.y = 0;
-    this.world.add(refrigerator);
-
-    let curtain = new Scenery({
-      tileset: spritesheets.tileset,
-      width: 1,
-      height: 2,
-      tiles: [
-        'H3',
-        'HB',
-      ],
-    });
-    curtain.x = 2;
-    curtain.y = 0;
-    this.world.add(curtain);
-
-    let counter = new Scenery({
-      tileset: spritesheets.tileset,
-      width: 7,
-      height: 7,
-      tiles: [
-        '8G', '8H', null, null, null, null, null,
-        '94', '95', null, null, null, null, null,
-        '94', '95', null, null, null, null, null,
-        '94', '95', null, null, null, null, null,
-        '9C', '9D', '9E', '9E', '9E', '9E', '9E',
-        'A0', 'A1', 'A2', 'A2', 'A2', 'A2', 'A2',
-        'A8', 'A9', 'AA', 'AA', 'AA', 'AA', 'AA',
-      ],
-    });
-    counter.x = 4;
-    counter.y = 1;
-    this.world.add(counter);
+    this.setupScenery(spritesheets.tileset);
 
     this.karis = new Person(spritesheets.karis);
-    this.karis.x = 5;
-    this.karis.y = 7;
+    this.karis.x = 6;
+    this.karis.y = 4;
     this.world.add(this.karis);
   }
 
@@ -114,6 +74,58 @@ export default class Game {
 
   static updateAndRender() {
     this.renderer.render(this.world.container);
+  }
+
+  static setupScenery(tileset) {
+    let refrigerator = makeRefrigerator(tileset);
+    refrigerator.x = 12;
+    refrigerator.y = 0;
+    this.world.add(refrigerator);
+
+    let curtain = makeCurtain(tileset);
+    curtain.x = 2;
+    curtain.y = 0;
+    this.world.add(curtain);
+
+    let counter = makeCounter(tileset);
+    counter.x = 4;
+    counter.y = 2;
+    this.world.add(counter);
+
+    each(range(5, 11), (x) => {
+      let chair = makeChair2(tileset);
+      chair.x = x;
+      chair.y = 7;
+      this.world.add(chair);
+    });
+
+    each(range(3, 7), (y) => {
+      let chair = makeChair1(tileset);
+      chair.x = 3;
+      chair.y = y;
+      this.world.add(chair);
+    });
+
+    each([2, 5], (y) => {
+      each([0, 1], (x) => {
+        let chair = makeChair1(tileset);
+        chair.x = x;
+        chair.y = y;
+        this.world.add(chair);
+      });
+
+      let table = makeTable(tileset);
+      table.x = 0;
+      table.y = y;
+      this.world.add(table);
+
+      each([0, 1], (x) => {
+        let chair = makeChair2(tileset);
+        chair.x = x;
+        chair.y = y + 2;
+        this.world.add(chair);
+      });
+    });
   }
 }
 
