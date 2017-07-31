@@ -3,7 +3,6 @@ import {bind, range, each} from 'lodash';
 import * as Spritesheets from './spritesheets.js';
 import World from './world.js';
 import Person from './person.js';
-import Scenery from './scenery.js';
 import {
   makeCounter,
   makeCurtain,
@@ -12,6 +11,7 @@ import {
   makeChair2,
   makeTable,
 } from './scenery.js';
+import Action from './action.js';
 
 const WIDTH = 16;
 const HEIGHT = 9;
@@ -40,10 +40,17 @@ export default class Game {
 
     this.setupScenery(spritesheets.tileset);
 
-    this.karis = new Person(spritesheets.karis);
-    this.karis.x = 6;
-    this.karis.y = 4;
-    this.world.add(this.karis);
+    let karis = new Person(spritesheets.karis);
+    karis.x = 6;
+    karis.y = 4;
+    this.world.add(karis);
+
+    Action.configure({
+      karis: karis,
+      passability: this.world.passability,
+      width: WIDTH,
+      height: HEIGHT,
+    });
   }
 
   static start() {
@@ -55,7 +62,7 @@ export default class Game {
     function frame(timestamp) {
       window.requestAnimationFrame(frame);
 
-      if (timestamp - lastTimestamp > 1000 / 15) {
+      if (timestamp - lastTimestamp > 1000 / 30) {
         lastTimestamp = timestamp;
         fps++;
         updateAndRender();
@@ -73,6 +80,7 @@ export default class Game {
   }
 
   static updateAndRender() {
+    this.world.frame();
     this.renderer.render(this.world.container);
   }
 

@@ -1,10 +1,12 @@
 import Entity from './entity.js';
-import {makeTiledSprite} from './utilities.js';
+import {makeTiledSprites} from './utilities.js';
 
 export default class Scenery extends Entity {
   constructor(options) {
     super();
-    this.container = makeTiledSprite(options);
+    let tiledSprites = makeTiledSprites(options);
+    this.container = tiledSprites.container;
+    this.foreground = tiledSprites.foreground;
   }
 }
 
@@ -14,12 +16,20 @@ export function makeCounter(tileset) {
     width: 7,
     height: 6,
     tiles: [
-      '8G', '8H', null, null, null, null, null,
+      null, null, null, null, null, null, null,
       '94', '95', null, null, null, null, null,
       '94', '95', null, null, null, null, null,
-      '9C', '9D', '9E', '9E', '9E', '9E', '9E',
+      '9C', '9D', null, null, null, null, null,
       'A0', 'A1', 'A2', 'A2', 'A2', 'A2', 'A2',
       'A8', 'A9', 'AA', 'AA', 'AA', 'AA', 'AA',
+    ],
+    foregroundTiles: [
+      '8G', '8H', null, null, null, null, null,
+      null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null,
+      null, null, '9E', '9E', '9E', '9E', '9E',
+      null, null, null, null, null, null, null,
+      null, null, null, null, null, null, null,
     ],
   });
 };

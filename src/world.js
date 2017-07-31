@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
-import {pull, each} from 'lodash';
-import {makeTiledSprite} from './utilities.js';
+import {pull, each, map} from 'lodash';
+import {makeTiledSprites} from './utilities.js';
+import Action from './action.js';
 
 const HIGHLIGHT = new PIXI.Graphics();
 
@@ -12,8 +13,12 @@ HIGHLIGHT.alpha = 0.2;
 export default class World {
   constructor(options) {
     this.container = new PIXI.Container();
+    this._default = new PIXI.Container();
+    this._foreground = new PIXI.Container();
 
-    let floor = makeTiledSprite({
+    this.passability = map(options.floor.tileCallbacks, (tcb) => tcb == '00');
+
+    let floor = makeTiledSprites({
       width: options.width,
       height: options.height,
       tileset: options.tileset,
@@ -23,30 +28,44 @@ export default class World {
         '00': (tile, x, y) => {
           tile.interactive = true;
 
-          tile.mouseover = (data) => {
-            data.currentTarget.addChild(HIGHLIGHT);
+          tile.mousedown = () => {
+            Action.moveKarisTo(x, y);
           };
 
-          tile.mouseout = (data) => {
-            data.currentTarget.removeChild(HIGHLIGHT);
+          tile.mouseover = () => {
+            tile.addChild(HIGHLIGHT);
+          };
+
+          tile.mouseout = () => {
+            tile.removeChild(HIGHLIGHT);
           };
         },
       },
-    });
+    }).container;
 
     this.container.addChild(floor);
+    this.container.addChild(this._default);
+    this.container.addChild(this._foreground);
 
     this._entities = [];
   }
 
   add(entity) {
     this._entities.push(entity);
-    this.container.addChild(entity.container);
+    this._default.addChild(entity.container);
+
+    if (entity.foreground) {
+      this._foreground.addChild(entity.foreground);
+    }
   }
 
-  remove(entity) {
+  remove(entity, container) {
     pull(this._entities, entity);
-    this.container.removeChild(entity.container);
+    this._default.removeChild(entity.container);
+
+    if (entity.foreground) {
+      this._foreground.removeChild(entity.foreground);
+    }
   }
 
   frame() {
