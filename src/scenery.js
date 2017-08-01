@@ -94,3 +94,57 @@ export function makeTable(tileset) {
     ],
   });
 };
+
+export function makePrepTable(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 2,
+    height: 3,
+    tiles: [
+      null, null,
+      'CI', 'D0',
+      'D6', 'D8',
+    ],
+    foregroundTiles: [
+      'CA', 'CC',
+      null, null,
+      null, null,
+    ],
+    decorations: [
+      {
+        tile: '91',
+        x: 0,
+        y: 32,
+      },
+      {
+        tile: 'DD',
+        x: 32,
+        y: 32,
+      },
+    ],
+  });
+};
+
+export function makeCookingBench(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 4,
+    height: 2,
+    tiles: [
+      'CA', 'CB', 'CB', 'CC',
+      'D6', 'D7', 'D7', 'D8',
+    ],
+    decorations: [
+      {
+        tile: 'D2',
+        x: 64,
+        y: 0,
+      },
+      {
+        tile: 'D2',
+        x: 96,
+        y: 0,
+      },
+    ]
+  });
+};

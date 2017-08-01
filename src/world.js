@@ -3,11 +3,11 @@ import {pull, each, map} from 'lodash';
 import {makeTiledSprites} from './utilities.js';
 import Action from './action.js';
 
-const HIGHLIGHT = new PIXI.Graphics();
+const HIGHLIGHT = new PIXI.Graphics()
+  .beginFill(0xFFFFFF)
+  .drawRect(0, 0, 32, 32)
+  .endFill();
 
-HIGHLIGHT.beginFill(0xFFFFFF);
-HIGHLIGHT.drawRect(0, 0, 32, 32);
-HIGHLIGHT.endFill();
 HIGHLIGHT.alpha = 0.2;
 
 export default class World {

@@ -4,9 +4,36 @@ import Entity from './entity.js';
 export default class Person extends Entity {
   constructor(spritesheet) {
     super();
-    this.container = new PIXI.Sprite(
+
+    this.container = new PIXI.Container();
+
+    this.container.addChild(new PIXI.Graphics()
+      .beginFill(0x645A73)
+      .drawPolygon(
+        8, 31,
+        9, 31,
+        9, 30,
+        23, 30,
+        23, 31,
+        24, 31,
+        24, 33,
+        23, 33,
+        23, 34,
+        9, 34,
+        9, 33,
+        8, 33,
+      )
+      .endFill()
+    );
+
+    let sprite = new PIXI.Sprite(
       spritesheet.textures[spritesheet.baseTexture.imageUrl + 'D1']
     );
+
+    sprite.x = -0.5;
+
+    this.container.addChild(sprite);
+
     this.movementQueue = [];
     this.moving = null;
   }

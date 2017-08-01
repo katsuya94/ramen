@@ -10,6 +10,8 @@ import {
   makeChair1,
   makeChair2,
   makeTable,
+  makePrepTable,
+  makeCookingBench,
 } from './scenery.js';
 import Action from './action.js';
 
@@ -134,6 +136,16 @@ export default class Game {
         this.world.add(chair);
       });
     });
+
+    let prepTable = makePrepTable(tileset);
+    prepTable.x = 13;
+    prepTable.y = 5;
+    this.world.add(prepTable);
+
+    let cookingBench = makeCookingBench(tileset);
+    cookingBench.x = 7;
+    cookingBench.y = 1;
+    this.world.add(cookingBench);
   }
 }
 
