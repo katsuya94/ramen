@@ -10,8 +10,13 @@ import {
   makeChair1,
   makeChair2,
   makeTable,
+  makeThinTable1,
+  makeThinTable2,
   makePrepTable,
-  makeCookingBench,
+  makeBench,
+  makeShortBench,
+  makeShelf,
+  makeStove,
 } from './scenery.js';
 import Action from './action.js';
 
@@ -105,47 +110,83 @@ export default class Game {
     each(range(4, 11), (x) => {
       let chair = makeChair2(tileset);
       chair.x = x;
-      chair.y = 7;
+      chair.y = 6;
       this.world.add(chair);
     });
 
-    each(range(3, 7), (y) => {
-      let chair = makeChair1(tileset);
+    each(range(2, 6), (y) => {
+      let chair = makeChair2(tileset);
       chair.x = 3;
       chair.y = y;
       this.world.add(chair);
     });
 
-    each([2, 5], (y) => {
-      each([0, 1], (x) => {
+    let thinTable = makeThinTable1(tileset);
+    thinTable.x = 0;
+    thinTable.y = 1;
+    this.world.add(thinTable);
+
+    each([0, 1], (x) => {
+      let chair = makeChair2(tileset);
+      chair.x = x;
+      chair.y = 2;
+      this.world.add(chair);
+    });
+
+    each([0, 1], (x) => {
+      let chair = makeChair1(tileset);
+      chair.x = x;
+      chair.y = 4;
+      this.world.add(chair);
+    });
+
+    let table = makeTable(tileset);
+    table.x = 0;
+    table.y = 4;
+    this.world.add(table);
+
+    each([0, 1], (x) => {
+      let chair = makeChair2(tileset);
+      chair.x = x;
+      chair.y = 6;
+      this.world.add(chair);
+    });
+
+    each([0, 3, 6, 9], (x) => {
+      each([x, x + 1], (x) => {
         let chair = makeChair1(tileset);
         chair.x = x;
-        chair.y = y;
+        chair.y = 8;
         this.world.add(chair);
       });
 
-      let table = makeTable(tileset);
-      table.x = 0;
-      table.y = y;
-      this.world.add(table);
-
-      each([0, 1], (x) => {
-        let chair = makeChair2(tileset);
-        chair.x = x;
-        chair.y = y + 2;
-        this.world.add(chair);
-      });
+      let thinTable = makeThinTable1(tileset);
+      thinTable.x = x;
+      thinTable.y = 8;
+      this.world.add(thinTable);
     });
 
     let prepTable = makePrepTable(tileset);
     prepTable.x = 13;
-    prepTable.y = 5;
+    prepTable.y = 3;
     this.world.add(prepTable);
 
-    let cookingBench = makeCookingBench(tileset);
-    cookingBench.x = 7;
-    cookingBench.y = 1;
-    this.world.add(cookingBench);
+    let bench = makeBench(tileset);
+    bench.x = 7;
+    bench.y = 1;
+    this.world.add(bench);
+
+    each([14, 15], (x) => {
+      let shelf = makeShelf(tileset);
+      shelf.x = x;
+      shelf.y = 0;
+      this.world.add(shelf);
+    });
+
+    let stove = makeStove(tileset);
+    stove.x = 12;
+    stove.y = 8;
+    this.world.add(stove);
   }
 }
 

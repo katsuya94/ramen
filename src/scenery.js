@@ -14,10 +14,9 @@ export function makeCounter(tileset) {
   return new Scenery({
     tileset: tileset,
     width: 7,
-    height: 6,
+    height: 5,
     tiles: [
       null, null, null, null, null, null, null,
-      '94', '95', null, null, null, null, null,
       '94', '95', null, null, null, null, null,
       '9C', '9D', null, null, null, null, null,
       'A0', 'A1', 'A2', 'A2', 'A2', 'A2', 'A2',
@@ -26,10 +25,21 @@ export function makeCounter(tileset) {
     foregroundTiles: [
       '8G', '8H', null, null, null, null, null,
       null, null, null, null, null, null, null,
-      null, null, null, null, null, null, null,
       null, null, '9E', '9E', '9E', '9E', '9E',
       null, null, null, null, null, null, null,
       null, null, null, null, null, null, null,
+    ],
+    decorations: [
+      {
+        tile: '78',
+        x: 39,
+        y: 0,
+      },
+      {
+        tile: '7G',
+        x: 39,
+        y: 32,
+      },
     ],
   });
 };
@@ -95,13 +105,43 @@ export function makeTable(tileset) {
   });
 };
 
+export function makeThinTable1(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 2,
+    height: 2,
+    tiles: [
+      '48', '4A',
+      '54', '56',
+    ],
+  });
+};
+
+export function makeThinTable2(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 1,
+    height: 2,
+    tiles: [
+      null,
+      '74',
+    ],
+    foregroundTiles: [
+      '6G',
+      null,
+    ],
+  });
+};
+
 export function makePrepTable(tileset) {
   return new Scenery({
     tileset: tileset,
     width: 2,
-    height: 3,
+    height: 5,
     tiles: [
       null, null,
+      'CI', 'D0',
+      'CI', 'D0',
       'CI', 'D0',
       'D6', 'D8',
     ],
@@ -109,23 +149,30 @@ export function makePrepTable(tileset) {
       'CA', 'CC',
       null, null,
       null, null,
+      null, null,
+      null, null,
     ],
     decorations: [
       {
         tile: '91',
         x: 0,
-        y: 32,
+        y: 96,
       },
       {
         tile: 'DD',
         x: 32,
-        y: 32,
+        y: 64,
+      },
+      {
+        tile: 'DD',
+        x: 32,
+        y: 96,
       },
     ],
   });
 };
 
-export function makeCookingBench(tileset) {
+export function makeBench(tileset) {
   return new Scenery({
     tileset: tileset,
     width: 4,
@@ -134,17 +181,54 @@ export function makeCookingBench(tileset) {
       'CA', 'CB', 'CB', 'CC',
       'D6', 'D7', 'D7', 'D8',
     ],
+  });
+};
+
+export function makeShelf(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 1,
+    height: 3,
+    tiles: [
+      'D3',
+      'DB',
+      'DJ',
+    ],
+  });
+};
+
+export function makeStove(tileset) {
+  return new Scenery({
+    tileset: tileset,
+    width: 4,
+    height: 1,
+    tiles: [
+      null, null, null, null,
+    ],
+    foregroundTiles: [
+      'CA', 'CB', 'CB', 'CC',
+    ],
     decorations: [
       {
         tile: 'D2',
+        x: 0,
+        y: 18,
+      },
+      {
+        tile: 'D2',
+        x: 32,
+        y: 18,
+      },
+      {
+        tile: 'D2',
         x: 64,
-        y: 0,
+        y: 18,
       },
       {
         tile: 'D2',
         x: 96,
-        y: 0,
+        y: 18,
       },
     ]
   });
-};
+}

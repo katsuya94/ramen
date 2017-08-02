@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import {each} from 'lodash';
 import Entity from './entity.js';
 
 export default class Person extends Entity {
@@ -6,8 +7,7 @@ export default class Person extends Entity {
     super();
 
     this.container = new PIXI.Container();
-
-    this.container.addChild(new PIXI.Graphics()
+    this.background = new PIXI.Graphics()
       .beginFill(0x645A73)
       .drawPolygon(
         8, 31,
@@ -23,8 +23,7 @@ export default class Person extends Entity {
         9, 33,
         8, 33,
       )
-      .endFill()
-    );
+      .endFill();
 
     let sprite = new PIXI.Sprite(
       spritesheet.textures[spritesheet.baseTexture.imageUrl + 'D1']
@@ -68,11 +67,15 @@ export default class Person extends Entity {
       let dx = (this._x * 32 - this.moving.x * 32) / 32;
       let dy = (this._y * 32 - this.moving.y * 32) / 32;
 
-      this.container.x = this._x * 32 + dx * this.moving.progress;
-      this.container.y = this._y * 32 + dy * this.moving.progress;
+      each([this.container, this.background], (container) => {
+        container.x = this._x * 32 + dx * this.moving.progress;
+        container.y = this._y * 32 + dy * this.moving.progress;
+      });
     } else {
-      this.container.x = this._x * 32;
-      this.container.y = this._y * 32;
+      each([this.container, this.background], (container) => {
+        container.x = this._x * 32;
+        container.y = this._y * 32;
+      });
     }
   }
 }
