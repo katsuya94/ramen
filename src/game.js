@@ -108,14 +108,14 @@ export default class Game {
     this.world.add(counter);
 
     each(range(4, 11), (x) => {
-      let chair = makeChair2(tileset);
+      let chair = makeChair2(tileset, {x: x, y: 7});
       chair.x = x;
       chair.y = 6;
       this.world.add(chair);
     });
 
     each(range(2, 6), (y) => {
-      let chair = makeChair2(tileset);
+      let chair = makeChair2(tileset, {x: 2, y: y});
       chair.x = 3;
       chair.y = y;
       this.world.add(chair);
@@ -127,14 +127,14 @@ export default class Game {
     this.world.add(thinTable);
 
     each([0, 1], (x) => {
-      let chair = makeChair2(tileset);
+      let chair = makeChair2(tileset, {x: x, y: 3});
       chair.x = x;
       chair.y = 2;
       this.world.add(chair);
     });
 
     each([0, 1], (x) => {
-      let chair = makeChair1(tileset);
+      let chair = makeChair1(tileset, {x: x, y: 3});
       chair.x = x;
       chair.y = 4;
       this.world.add(chair);
@@ -146,7 +146,7 @@ export default class Game {
     this.world.add(table);
 
     each([0, 1], (x) => {
-      let chair = makeChair2(tileset);
+      let chair = makeChair2(tileset, {x: x, y: 7});
       chair.x = x;
       chair.y = 6;
       this.world.add(chair);
@@ -154,7 +154,7 @@ export default class Game {
 
     each([0, 3, 6, 9], (x) => {
       each([x, x + 1], (x) => {
-        let chair = makeChair1(tileset);
+        let chair = makeChair1(tileset, {x: x, y: 7});
         chair.x = x;
         chair.y = 8;
         this.world.add(chair);

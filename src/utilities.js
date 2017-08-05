@@ -19,7 +19,6 @@ export function makeTiledSprites(options) {
     return new PIXI.Sprite(options.tileset.textures[textureID]);
   };
 
-
   each(zipped, (tileTuple, index) => {
     let [tileID, foregroundTileID, tileCallback] = tileTuple;
 

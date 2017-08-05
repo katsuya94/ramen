@@ -35,6 +35,8 @@ export default class Person extends Entity {
 
     this.movementQueue = [];
     this.moving = null;
+
+    this.whenDoneMoving = null;
   }
 
   frame() {
@@ -51,6 +53,10 @@ export default class Person extends Entity {
       }
 
       if (!this.moving) {
+        if (this.whenDoneMoving) {
+          this.whenDoneMoving();
+          this.whenDoneMoving = null;
+        }
         break;
       }
 

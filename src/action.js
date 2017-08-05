@@ -69,7 +69,7 @@ export default class Action {
     this.next = next;
   }
 
-  static moveKarisTo(destX, destY) {
+  static moveKarisAndDo(destX, destY, action) {
     let srcX = this.karis.x;
     let srcY = this.karis.y;
 
@@ -87,6 +87,10 @@ export default class Action {
     }
 
     this.karis.movementQueue = path;
+    this.karis.whenDoneMoving = action;
   }
+
+  static sitKaris(chair) {
+    this.karis.seated = true;
 }
 

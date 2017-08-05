@@ -1,12 +1,42 @@
+import * as PIXI from 'pixi.js';
+import {assign, each} from 'lodash';
 import Entity from './entity.js';
 import {makeTiledSprites} from './utilities.js';
+import * as Assets from './assets.js';
+import Action from './action.js';
+
 
 export default class Scenery extends Entity {
   constructor(options) {
     super();
+
     let tiledSprites = makeTiledSprites(options);
     this.container = tiledSprites.container;
     this.foreground = tiledSprites.foreground;
+
+    if (options.action) {
+      let arrow = new PIXI.Sprite(Assets.loaded['assets/arrow.png'].texture);
+      arrow.pivot.x = 5.5;
+      arrow.pivot.y = 6.5;
+      arrow.x = options.action.x;
+      arrow.y = options.action.y;
+
+      this.container.interactive = true;
+
+      if (options.action.hitArea) {
+        this.container.hitArea = options.action.hitArea;
+      };
+
+      this.container.mouseover = () => {
+        this.foreground.addChild(arrow);
+      };
+
+      this.container.mouseout = () => {
+        this.foreground.removeChild(arrow);
+      };
+
+      this.container.mousedown = options.action.callback;
+    }
   }
 }
 
@@ -69,7 +99,16 @@ export function makeRefrigerator(tileset) {
   });
 };
 
-export function makeChair1(tileset) {
+
+function makeSitCallback(options) {
+  return (event) => {
+    Action.moveKarisAndDo(options.x, options.y, () => {
+      Action.sitKaris();
+    });
+  };
+}
+
+export function makeChair1(tileset, options) {
   return new Scenery({
     tileset: tileset,
     width: 1,
@@ -77,10 +116,16 @@ export function makeChair1(tileset) {
     tiles: [
       '5C',
     ],
+    action: {
+      x: 16,
+      y: -4,
+      callback: (event) => makeSitCallback(options),
+      hitArea: new PIXI.Rectangle(9, 1, 14, 21),
+    },
   });
 };
 
-export function makeChair2(tileset) {
+export function makeChair2(tileset, options) {
   return new Scenery({
     tileset: tileset,
     width: 1,
@@ -89,6 +134,12 @@ export function makeChair2(tileset) {
       '60',
       '68',
     ],
+    action: {
+      x: 16,
+      y: 12,
+      callback: (event) => makeSitCallback(options),
+      hitArea: new PIXI.Rectangle(9, 19, 14, 21),
+    },
   });
 };
 

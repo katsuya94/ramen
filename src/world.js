@@ -3,13 +3,6 @@ import {pull, each, map} from 'lodash';
 import {makeTiledSprites} from './utilities.js';
 import Action from './action.js';
 
-const HIGHLIGHT = new PIXI.Graphics()
-  .beginFill(0xFFFFFF)
-  .drawRect(0, 0, 32, 32)
-  .endFill();
-
-HIGHLIGHT.alpha = 0.2;
-
 export default class World {
   constructor(options) {
     this.container = new PIXI.Container();
@@ -30,15 +23,7 @@ export default class World {
           tile.interactive = true;
 
           tile.mousedown = () => {
-            Action.moveKarisTo(x, y);
-          };
-
-          tile.mouseover = () => {
-            tile.addChild(HIGHLIGHT);
-          };
-
-          tile.mouseout = () => {
-            tile.removeChild(HIGHLIGHT);
+            Action.moveKarisAndDo(x, y, null);
           };
         },
       },
