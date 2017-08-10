@@ -86,11 +86,16 @@ export default class Action {
       currentKey = nextKey;
     }
 
+    if (this.karis.sitting) {
+      this.karis.unsit();
+    }
+
     this.karis.movementQueue = path;
     this.karis.whenDoneMoving = action;
   }
 
-  static sitKaris(chair) {
-    this.karis.seated = true;
+  static sitKaris(x, y, dx, dy) {
+    this.karis.sit(x, y, dx, dy);
+  }
 }
 

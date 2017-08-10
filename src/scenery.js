@@ -14,17 +14,21 @@ export default class Scenery extends Entity {
     this.container = tiledSprites.container;
     this.foreground = tiledSprites.foreground;
 
-    if (options.action) {
+    this.action = options.action;
+  }
+
+  set action(action) {
+    if (action) {
       let arrow = new PIXI.Sprite(Assets.loaded['assets/arrow.png'].texture);
       arrow.pivot.x = 5.5;
       arrow.pivot.y = 6.5;
-      arrow.x = options.action.x;
-      arrow.y = options.action.y;
+      arrow.x = action.x;
+      arrow.y = action.y;
 
       this.container.interactive = true;
 
-      if (options.action.hitArea) {
-        this.container.hitArea = options.action.hitArea;
+      if (action.hitArea) {
+        this.container.hitArea = action.hitArea;
       };
 
       this.container.mouseover = () => {
@@ -35,7 +39,7 @@ export default class Scenery extends Entity {
         this.foreground.removeChild(arrow);
       };
 
-      this.container.mousedown = options.action.callback;
+      this.container.mousedown = action.callback;
     }
   }
 }
@@ -99,34 +103,36 @@ export function makeRefrigerator(tileset) {
   });
 };
 
-
-function makeSitCallback(options) {
+function makeSitCallback(chair, options) {
   return (event) => {
     Action.moveKarisAndDo(options.x, options.y, () => {
-      Action.sitKaris();
+      Action.sitKaris(chair.x, chair.y, options.dx, options.dy);
     });
   };
 }
 
 export function makeChair1(tileset, options) {
-  return new Scenery({
+  let chair = new Scenery({
     tileset: tileset,
     width: 1,
     height: 1,
     tiles: [
       '5C',
     ],
-    action: {
-      x: 16,
-      y: -4,
-      callback: (event) => makeSitCallback(options),
-      hitArea: new PIXI.Rectangle(9, 1, 14, 21),
-    },
   });
+
+  chair.action = {
+    x: 16,
+    y: -4,
+    callback: makeSitCallback(chair, assign(options, {dx: 0, dy: -8})),
+    hitArea: new PIXI.Rectangle(9, 1, 14, 21),
+  };
+
+  return chair;
 };
 
 export function makeChair2(tileset, options) {
-  return new Scenery({
+  let chair = new Scenery({
     tileset: tileset,
     width: 1,
     height: 2,
@@ -134,13 +140,16 @@ export function makeChair2(tileset, options) {
       '60',
       '68',
     ],
-    action: {
-      x: 16,
-      y: 12,
-      callback: (event) => makeSitCallback(options),
-      hitArea: new PIXI.Rectangle(9, 19, 14, 21),
-    },
   });
+
+  chair.action = {
+    x: 16,
+    y: 12,
+    callback: makeSitCallback(chair, assign(options, {dx: 0, dy: 4})),
+    hitArea: new PIXI.Rectangle(9, 19, 14, 21),
+  };
+
+  return chair
 };
 
 export function makeTable(tileset) {
@@ -149,9 +158,14 @@ export function makeTable(tileset) {
     width: 2,
     height: 3,
     tiles: [
-      '48', '4A',
+      null, null,
       '4G', '4I',
       '54', '56',
+    ],
+    foregroundTiles: [
+      '48', '4A',
+      null, null,
+      null, null,
     ],
   });
 };
@@ -162,8 +176,12 @@ export function makeThinTable1(tileset) {
     width: 2,
     height: 2,
     tiles: [
-      '48', '4A',
+      null, null,
       '54', '56',
+    ],
+    foregroundTiles: [
+      '48', '4A',
+      null, null,
     ],
   });
 };

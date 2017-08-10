@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {each} from 'lodash';
+import {each, min} from 'lodash';
 import Entity from './entity.js';
 
 export default class Person extends Entity {
@@ -39,11 +39,25 @@ export default class Person extends Entity {
     this.whenDoneMoving = null;
   }
 
+  sit(x, y, dx, dy) {
+    this.sitting = {
+      status: true,
+      x: x * 32 + dx,
+      y: y * 32 + dy,
+      progress: -32,
+    };
+  }
+
+  unsit() {
+    this.sitting.status = false;
+    this.sitting.progress = -32;
+  }
+
   frame() {
     let frameProgress = 4;
 
     while (frameProgress > 0) {
-      if (!this.moving) {
+      if (!this.moving && !this.sitting) {
         let next = this.movementQueue.shift();
         if (next) {
           this.moving = {x: this._x, y: this._y, progress: -32};
@@ -53,7 +67,7 @@ export default class Person extends Entity {
       }
 
       if (!this.moving) {
-        if (this.whenDoneMoving) {
+        if (this.whenDoneMoving && !this.sitting) {
           this.whenDoneMoving();
           this.whenDoneMoving = null;
         }
@@ -69,14 +83,47 @@ export default class Person extends Entity {
       }
     }
 
+    if (this.sitting) {
+      this.sitting.progress += frameProgress;
+      this.sitting.progress = Math.min(this.sitting.progress, 0);
+
+      if (!this.sitting.status && this.sitting.progress >= 0) {
+        this.sitting = null;
+      }
+    }
+
+    let setPos = (x, y) => {
+      each([this.container, this.background], (container) => {
+        container.x = x;
+        container.y = y;
+      });
+    };
+
     if (this.moving) {
       let dx = (this._x * 32 - this.moving.x * 32) / 32;
       let dy = (this._y * 32 - this.moving.y * 32) / 32;
 
-      each([this.container, this.background], (container) => {
-        container.x = this._x * 32 + dx * this.moving.progress;
-        container.y = this._y * 32 + dy * this.moving.progress;
-      });
+      setPos(
+        this._x * 32 + dx * this.moving.progress,
+        this._y * 32 + dy * this.moving.progress,
+      )
+    } else if (this.sitting) {
+      let dx = (this.sitting.x - this._x * 32) / 32;
+      let dy = (this.sitting.y - this._y * 32) / 32;
+
+      if (this.sitting.status) {
+        setPos(
+          this._x * 32 + dx * (32 + this.sitting.progress),
+          this._y * 32 + dy * (32 + this.sitting.progress),
+        );
+      } else {
+        setPos(
+          this._x * 32 - dx * this.sitting.progress,
+          this._y * 32 - dy * this.sitting.progress,
+        );
+      }
+
+      this.container.y -= 8 * (16 - Math.abs(this.sitting.progress + 16)) / 16;
     } else {
       each([this.container, this.background], (container) => {
         container.x = this._x * 32;
